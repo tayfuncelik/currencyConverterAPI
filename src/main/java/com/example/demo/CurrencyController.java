@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.dto.CurrencyApiResponse;
 import com.example.demo.dto.CurrencyDto;
 import com.example.demo.dto.ExchangedDto;
 import com.example.demo.model.CurrencyEnum;
@@ -35,6 +34,7 @@ public class CurrencyController implements Serializable {
      * @return
      */
 
+
     @GetMapping("/getCurrencyList")
     private ResponseEntity<List<CurrencyEnum>> getCurrencyList() {
         return ResponseEntity.ok(currencyService.getCurrencyList());
@@ -45,10 +45,12 @@ public class CurrencyController implements Serializable {
      * @param currencyDto
      * @return
      */
+    @Timed("hello.api.time")
     @PostMapping("/getExchangeCurrency")
     public ResponseEntity<ExchangedDto> getExchangeCurrency(
             @ApiParam(value = "currency params", required = true) @RequestBody CurrencyDto currencyDto
     ) {
+        RegistryConfig.helloApiCounter.increment();
         if (!isInputsValid(currencyDto)) {
             return new ResponseEntity<>(new ExchangedDto(), HttpStatus.BAD_REQUEST);
         }
